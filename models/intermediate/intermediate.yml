@@ -1,0 +1,106 @@
+version: 2
+
+models:
+    - name: int_geo
+      description: Tabela com a relação de cidades, estados e países
+      
+      columns:
+        - name: AddressID
+          description: ID do endereço (PK)
+        - name: City
+          description: Cidade
+        - name: StateProvince
+          description: Estado/província
+        - name: CountryRegion
+          description: País/região
+
+    - name: int_person
+      description: Tabela de clientes (pessoa física)
+      
+      columns:
+        - name: CustomerID
+          description: ID do cliente (FK)
+        - name: BusinessEntityID
+          description: ID da entidade (PK)
+        - name: BusinessEntityType
+          description: Tipo de entidade (neste caso, "Person")
+        - name: Name
+          description: Nome composto pelos honorífico, prenomes e sobrenome que houver
+
+    - name: int_phone
+      description: Tabela de números de telefone (pessoa física apenas)
+      
+      columns:
+        - name: BusinessEntityID
+          description: ID da entidade (PK, FK)
+        - name: PhoneNumber
+          description: Número de telefone (PK)
+        - name: PhoneNumberType
+          description: Tipo de telefone
+
+    - name: int_store
+      description: Tabela de clientes (pessoa jurídica)
+      
+      columns:
+        - name: CustomerID
+          description: ID do cliente (FK)
+        - name: BusinessEntityID
+          description: ID da entidade (PK)
+        - name: BusinessEntityType
+          description: Tipo de entidade (neste caso, "Store")
+        - name: Name
+          description: Nome da loja
+
+    - name: int_rem_customers
+      description: Tabela de clientes não identificados
+      
+      columns:
+        - name: CustomerID
+          description: ID do cliente (FK)
+        - name: BusinessEntityID
+          description: ID da entidade (null)
+        - name: BusinessEntityType
+          description: Tipo de entidade (null)
+        - name: Name
+          description: Nome do cliente (null)
+
+    - name: int_sales
+      description: Tabela de itens de pedidos
+      
+      columns:
+        - name: SalesOrderID
+          description: ID da transação (FK)
+        - name: SalesOrderDetailId
+          description: ID do item do pedido (PK)
+        - name: OrderDate
+          description: Data da transação
+        - name: Status
+          description: Status de transação
+        - name: CustomerID
+          description: ID do cliente (FK)
+        - name: CreditCardID
+          description: ID do cartão de crédito (FK)
+        - name: BillToAddressID
+          description: ID do endereço (FK)
+        - name: ProductID
+          description: ID do produto comprado (FK)
+        - name: OrderQty
+          description: Quantidade do produto comprado
+        - name: UnitPrice
+          description: Preço unitário do produto comprado
+        - name: UnitPriceDiscount
+          description: Desconto sobre o preço unitário do produto comprado
+
+    - name: int_sales_reason
+      description: Tabela de razões de venda
+      
+      columns:
+        - name: SalesOrderID
+          description: ID da transação (PK, FK)
+        - name: SalesReason
+          description: Razão de venda (PK)
+        - name: ReasonType
+          description: Tipo de razão de venda
+
+        
+        

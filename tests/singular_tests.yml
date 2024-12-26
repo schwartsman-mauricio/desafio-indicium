@@ -1,0 +1,8 @@
+version: 2
+
+data_tests:
+  - name: revenue
+    description: >
+      Garanta que a receita na tabela fato de cada transação seja igual até duas casas decimais
+      à receita observada na tabela de origem.
+

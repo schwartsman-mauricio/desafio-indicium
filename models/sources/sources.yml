@@ -1,0 +1,238 @@
+version: 2
+
+sources:
+  - name: RAW_ADVENTURE_WORKS
+    database: FEA24_11
+    schema: RAW_ADVENTURE_WORKS
+    description: Conjunto de dados brutos
+
+    tables:
+      - name: SalesOrderHeader
+        description: Relação de transações e chaves de cliente, status, cartão de crédito e endereço
+
+        columns:
+          - name: SalesOrderID
+            description: ID da transação (PK)
+            tests:
+              - unique
+              - not_null
+          - name: OrderDate
+            description: Data da transação
+            tests:
+              - not_null
+          - name: Status
+            description: Status da transação
+          - name: CustomerID
+            description: ID do cliente (FK)
+            tests:
+              - not_null
+          - name: CreditCardID
+            description: ID do cartão de crédito (FK)
+          - name: BillToAddressID
+            description: ID do endereço de cobrança (FK)
+            tests:
+              - not_null
+
+      - name: SalesOrderDetail
+        description: Relação de transações, produtos, quantidades e valores de compra
+
+        columns:
+          - name: SalesOrderID
+            description: ID da transação (FK)
+            tests:
+              - not_null
+          - name: SalesOrderDetailId
+            description: ID de um componente da transação (PK)
+            tests:
+              - unique
+              - not_null
+          - name: ProductID
+            description: ID do produto comprado (FK)
+            tests:
+              - not_null
+          - name: OrderQty
+            description: Quantidade comprada do produto
+          - name: UnitPrice
+            description: Preço unitário do produto
+          - name: UnitPriceDiscount
+            description: Taxa de desconto sobre o preço unitário do produto
+
+      - name: Product
+        description: Relação de produtos
+
+        columns:
+          - name: ProductID
+            description: ID do produto (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Name
+            description: Nome do produto
+
+      - name: CreditCard
+        description: Relação de tipos de cartão de crédito
+
+        columns:
+          - name: CreditCardID
+            description: ID do cartão de crédito (PK)
+            tests:
+              - unique
+              - not_null
+          - name: CardType
+            description: Tipo de cartão de crédito
+
+      - name: Customer
+        description: Relação de clientes
+
+        columns:
+          - name: CustomerID
+            description: ID do cliente (PK)
+            tests:
+              - unique
+              - not_null
+          - name: PersonID
+            description: ID de pessoa física (FK)
+          - name: StoreID
+            description: ID de pessoa jurídica (FK)
+
+      - name: Person
+        description: Relação clientes (pessoa física)
+
+        columns:
+          - name: BusinessEntityID
+            description: ID de pessoa física (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Title
+            description: Honorífico
+          - name: FirstName
+            description: Primeiro nome
+          - name: MiddleName
+            description: Nome do meio
+          - name: LastName
+            description: Sobrenome
+
+      - name: EmailAddress
+        description: Relação de endereços de e-mail (apenas pessoa física)
+
+        columns:
+          - name: BusinessEntityID
+            description: ID de pessoa física (PK)
+            tests:
+              - unique
+              - not_null
+          - name: EmailAddress
+            description: Endereço de e-mail
+
+      - name: PersonPhone
+        description: Relação de números de telefone (apenas pessoa física)
+
+        columns:
+          - name: BusinessEntityID
+            description: ID de pessoa física (PK)
+            tests:
+              - unique
+              - not_null
+          - name: PhoneNumber
+            description: Número de telefone
+          - name: PhoneNumberTypeID
+            description: ID de tipo de telefone (FK)
+
+      - name: PhoneNumberType
+        description: Tipos de telefone
+
+        columns:
+          - name: PhoneNumberTypeID
+            description: ID de tipo de telefone (FK)
+            tests:
+              - not_null
+          - name: Name
+            description: Tipo de telefone
+
+      - name: Store
+        description: Relação clientes (pessoa jurídica)
+
+        columns:
+          - name: BusinessEntityID
+            description: ID de pessoa jurídica (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Name
+            description: Nome da loja
+
+      - name: Address
+        description: Relação de cidades e estados
+
+        columns:
+          - name: AddressID
+            description: ID de endereço (PK)
+            tests:
+              - unique
+              - not_null
+          - name: City
+            description: Cidade
+          - name: StateProvinceID
+            description: ID do estado/província (FK)
+
+      - name: StateProvince
+        description: Relação de estados/províncias e países
+
+        columns:
+          - name: StateProvinceID
+            description: ID do estado/província (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Name
+            description: Estado/província
+          - name: CountryRegionCode
+            description: ID do país/região (FK)
+
+      - name: CountryRegion
+        description: Relação de países
+
+        columns:
+          - name: CountryRegionCode
+            description: ID do país/região (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Name
+            description: País/região
+
+      - name: SalesOrderHeaderSalesReason
+        description: Relação de pedidos e razões de venda (uma transação pode ter mais de uma razão)
+
+        tests:
+          - test_composite_pk:
+              pk_col1: SalesOrderID
+              pk_col2: SalesReasonID
+
+        columns:
+          - name: SalesOrderID
+            description: ID da transação (PK, FK)
+            tests:
+              - not_null
+          - name: SalesReasonID
+            description: ID da razão de venda (PK, FK)
+            tests:
+              - not_null
+
+      - name: SalesReason
+        description: Relação de razões de venda
+
+        columns:
+          - name: SalesReasonID
+            description: ID da razão de venda (PK)
+            tests:
+              - unique
+              - not_null
+          - name: Name
+            description: Razão da venda
+            tests:
+              - unique
+              - not_null
+          - name: ReasonType
+            description: Tipo de razão de venda

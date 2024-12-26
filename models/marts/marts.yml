@@ -1,0 +1,130 @@
+version: 2
+
+models:
+  - name: fct_sales
+    description: Tabela fato de vendas, inclusive com os produtos vendidos
+
+    columns:
+      - name: SalesOrderID
+        description: ID da transação (FK)
+        tests:
+          - not_null
+      - name: SalesOrderDetailId
+        description: ID do item do pedido (PK)
+        tests:
+          - unique
+          - not_null
+      - name: OrderDate
+        description: Data da transação
+      - name: OrderMonthYear
+        description: Mês da transação (formato AAAA-MM-01)
+      - name: OrderYear
+        description: Número do ano
+      - name: OrderMonth
+        description: Número do mês
+      - name: OrderMonth
+        description: Número do mês
+      - name: Status
+        description: Status da transação
+      - name: AddressID
+        description: ID do endereço de cobrança (FK)
+        tests:
+          - not_null
+      - name: CustomerID
+        description: ID do cliente (FK)
+        tests:
+          - not_null
+      - name: CreditCardID
+        description: ID do cartão de crédito (FK)
+      - name: ProductID
+        description: ID do produto comprado (PK)
+        tests:
+          - not_null
+      - name: OrderQty
+        description: Quantidade do produto comprado
+      - name: UnitPrice
+        description: Preço unitário do produto comprado
+      - name: UnitPriceDiscount
+        description: Taxa de desconto sobre o preço unitário do produto comprado
+
+  - name: dim_credit_card
+    description: Relação de cartões de crédito e seus tipos
+
+    columns:
+      - name: CreditCardID
+        description: ID do cartão de crédito (PK)
+        tests:
+          - unique
+          - not_null
+      - name: CardType
+        description: Tipo de cartão de crédito
+
+  - name: dim_customers
+    description: Relação de cartões de crédito e seus tipos
+
+    columns:
+      - name: CustomerID
+        description: ID do cliente (PK)
+        tests:
+          - unique
+          - not_null
+      - name: BusinessEntityType
+        description: Tipo de entidade ("Person", "Store" ou null)
+      - name: CustomerName
+        description: Nome do cliente
+      - name: PhoneNumber
+        description: Número de telefone do cliente (apenas pessoa física por ora)
+      - name: PhoneNumberType
+        description: Tipo de telefone do cliente (apenas pessoa física por ora)
+      - name: EmailAddress
+        description: Endereço de e-mail do cliente (apenas pessoa física por ora)
+
+  - name: dim_geo
+    description: Relação de cidade, estado e país
+
+    columns:
+      - name: AddressID
+        description: ID do endereço (PK)
+        tests:
+          - unique
+          - not_null
+      - name: City
+        description: Cidade
+      - name: StateProvince
+        description: Estado/província
+      - name: CountryRegion
+        description: País/região
+
+  - name: dim_product
+    description: Relação de produtos
+
+    columns:
+      - name: ProductID
+        description: ID do produto (PK)
+        tests:
+          - unique
+          - not_null
+      - name: ProductName
+        description: Nome do produto
+
+  - name: dim_sales_reason
+    description: Tabela de razões de venda (uma transação pode ter mais de uma razão de venda)
+    
+    tests:
+      - test_composite_pk:
+          pk_col1: SalesOrderID
+          pk_col2: SalesReason
+
+    columns:
+      - name: SalesOrderID
+        description: ID da transação (PK, FK)
+        tests:
+          - not_null
+      - name: SalesReason
+        description: Razão de venda (PK)
+        tests:
+          - not_null
+      - name: ReasonType
+        description: Tipo de razão de venda
+      - name: Weight
+        description: Peso da razão de venda dentro da transação (1 dividido pelo total de razões)
