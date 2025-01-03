@@ -17,6 +17,8 @@ with sales as (
         , UnitPrice
         , OrderQty * UnitPrice as Revenue
         , UnitPriceDiscount
+        , count(*) over(partition by SalesOrderID) as ItemCount
+        , 1 / count(*) over(partition by SalesOrderID) as ItemWeight
     from {{ ref("int_sales") }} as s
     left join {{ ref("int_geo") }} as g on s.BillToAddressID = g.AddressID
 )
