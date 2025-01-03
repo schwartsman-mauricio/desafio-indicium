@@ -46,6 +46,10 @@ models:
         description: Preço unitário do produto comprado
       - name: UnitPriceDiscount
         description: Taxa de desconto sobre o preço unitário do produto comprado
+      - name: ItemCount
+        description: Número total de itens no pedido
+      - name: ItemWeight
+        description: Peso de cada item na transação (o inverso de ItemWeight)
 
   - name: dim_credit_card
     description: Relação de cartões de crédito e seus tipos
