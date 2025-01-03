@@ -6,28 +6,36 @@ with customers as (
         , BusinessEntityID
         , BusinessEntityType
         , Name
-    from {{ ref("int_person") }}
+    from int_person
     union all
     select
         CustomerID
         , BusinessEntityID
         , BusinessEntityType
         , Name
-    from {{ ref("int_store") }}
+    from int_store
 ),
 
-all_customers as (
+rem_customers as (
     select
         CustomerID
         , null as BusinessEntityID
         , null as BusinessEntityType
         , null as Name
-    from {{ ref("src_customer") }}
+    from src_customer
     where 
         CustomerID not in (
             select distinct CustomerID
             from customers
         )
+),
+
+all_customers as (
+    select *
+    from customers
+    union all
+    select *
+    from rem_customers
 ),
 
 customers_crm as (
@@ -39,8 +47,8 @@ customers_crm as (
         , PhoneNumberType
         , EmailAddress
     from all_customers as c
-    left join {{ ref("int_phone") }} as p on c.BusinessEntityID = p.BusinessEntityID
-    left join {{ ref("src_email_address") }} as a on c.BusinessEntityID = a.BusinessEntityID
+    left join int_phone as p on c.BusinessEntityID = p.BusinessEntityID
+    left join src_email_address as a on c.BusinessEntityID = a.BusinessEntityID
 )
 
 select *
