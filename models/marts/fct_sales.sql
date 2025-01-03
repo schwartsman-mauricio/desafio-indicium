@@ -15,6 +15,7 @@ with sales as (
         , ProductID
         , OrderQty
         , UnitPrice
+        , OrderQty * UnitPrice as Revenue
         , UnitPriceDiscount
     from {{ ref("int_sales") }} as s
     left join {{ ref("int_geo") }} as g on s.BillToAddressID = g.AddressID
